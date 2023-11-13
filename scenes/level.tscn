@@ -1,0 +1,18 @@
+[gd_scene load_steps=4 format=3 uid="uid://b7db3e4l5rfxe"]
+
+[ext_resource type="PackedScene" uid="uid://cnnb1e0aeja7" path="res://scenes/floor.tscn" id="1_j16pw"]
+[ext_resource type="PackedScene" uid="uid://81a3ahycfxlq" path="res://scenes/character.tscn" id="2_h8vo1"]
+[ext_resource type="PackedScene" uid="uid://s2smcolei5go" path="res://scenes/roof.tscn" id="3_dnmmg"]
+
+[node name="Level" type="Node2D"]
+
+[node name="Floor" parent="." instance=ExtResource("1_j16pw")]
+
+[node name="Floor2" parent="." instance=ExtResource("1_j16pw")]
+position = Vector2(856, 237)
+
+[node name="Character" parent="." instance=ExtResource("2_h8vo1")]
+position = Vector2(367, 271)
+
+[node name="Roof" parent="." instance=ExtResource("3_dnmmg")]
+position = Vector2(566, 27)
