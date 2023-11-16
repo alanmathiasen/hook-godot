@@ -4,18 +4,22 @@ enum HookStates {NONE, EXTEND, HOOKED}
 
 const SPEED = 300.0
 const JUMP_VELOCITY = -800.0
-const HOOK_SPEED = 1000.0
-const HOOK_SWING_RADIUS : float = 1.0  # Adjust the swing radius as needed
 const SWING_SPEED : float = 0.001 # Adjust the swing speed as needed
 
+const HOOK_SPEED = 1000.0
+const HOOK_SWING_RADIUS : float = 1.0  # Adjust the swing radius as needed
 var swing_angle : float = 1
 # Get the gravity from the project settings to be synced with RigidBody nodes.
 var gravity = ProjectSettings.get_setting("physics/2d/default_gravity")
 var hook_state: HookStates = HookStates.NONE
 var prev_position
 var hook_position : Vector2 = Vector2.ZERO
-var is_first := true
 var hook_length = 0.0
+var hook_right_direction = Vector2(cos(deg_to_rad(315)), sin(deg_to_rad(315)))
+var hook_left_direction = Vector2(cos(deg_to_rad(225)), sin(deg_to_rad(225)))
+
+var is_first := true
+var last_looking_right = true
 
 @onready var hook := $"../Hook"
 @onready var line := $Line2D
@@ -42,6 +46,10 @@ func handle_character_movement(delta):
 	var direction = Input.get_axis("ui_left", "ui_right")
 	if direction != 0:
 		velocity.x = direction * SPEED
+		if direction > 0:
+			last_looking_right = true
+		elif direction < 0:
+			last_looking_right = false
 	else:
 		velocity.x = move_toward(velocity.x, 0, SPEED)
 	# Handle Jump.
@@ -76,8 +84,11 @@ func move_hook(delta):
 	var distance_travelled = global_position.distance_to(prev_position)
 	print(distance_travelled)
 	if hook_state == HookStates.EXTEND:
-		var direction = Vector2(cos(deg_to_rad(45)), sin(deg_to_rad(225)))
-		hook.global_position += direction * HOOK_SPEED * delta 
+		if last_looking_right:
+			hook.global_position += hook_right_direction * HOOK_SPEED * delta
+		else: 
+			hook.global_position += hook_left_direction * HOOK_SPEED * delta
+		# hook.global_position += last_looking_right ? hook_right_direction * HOOK_SPEED * delta : hook_left_direction * HOOK_SPEED * delta 
 	elif hook_state == HookStates.HOOKED:
 		swing(delta)
 	# 	print('hola')
@@ -104,6 +115,11 @@ func _on_hook_body_exited(_body:Node2D):
 
 func swing(delta):
 	var direction_to_hook = (hook_position - global_position).normalized()
-	var rotated_direction = direction_to_hook.rotated(deg_to_rad(-1))
+	var rotated_direction
+	var acceleration = hook_length * delta * 100
+	if last_looking_right:
+		rotated_direction = direction_to_hook.rotated(deg_to_rad(-HOOK_SWING_RADIUS))
+	else:
+		rotated_direction = direction_to_hook.rotated(deg_to_rad(HOOK_SWING_RADIUS))
 	global_position = hook_position - rotated_direction * hook_length
 	# swing_angle += SWING_SPEED * delta  # Increment the swing angle

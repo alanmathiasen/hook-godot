@@ -27,3 +27,7 @@ hook={
 
 2d_render/layer_2="Hook"
 2d_physics/layer_2="Hook"
+
+[physics]
+
+2d/default_gravity=500.0
