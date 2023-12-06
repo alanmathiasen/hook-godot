@@ -21,7 +21,9 @@ gradient = SubResource("Gradient_8l0ut")
 position = Vector2(0, -1)
 
 [node name="Character" type="CharacterBody2D" parent="."]
+position = Vector2(4, 0)
 script = ExtResource("1_kloc2")
+gravity = 300
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Character"]
 shape = SubResource("RectangleShape2D_fu1uw")
@@ -31,6 +33,7 @@ texture = ExtResource("1_o2t6l")
 
 [node name="Line2D" type="Line2D" parent="Character"]
 points = PackedVector2Array(0, 0, 0, 0)
+width = 3.0
 
 [node name="Hook" type="Area2D" parent="."]
 collision_layer = 2
