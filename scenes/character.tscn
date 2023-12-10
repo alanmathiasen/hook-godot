@@ -17,28 +17,27 @@ colors = PackedColorArray(0.364711, 0.364711, 0.364711, 1, 0.357944, 0.357944, 0
 [sub_resource type="GradientTexture2D" id="GradientTexture2D_era16"]
 gradient = SubResource("Gradient_8l0ut")
 
-[node name="Node2D" type="Node2D"]
+[node name="Character" type="CharacterBody2D"]
 position = Vector2(0, -1)
-
-[node name="Character" type="CharacterBody2D" parent="."]
-position = Vector2(4, 0)
 script = ExtResource("1_kloc2")
-gravity = 300
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="Character"]
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+position = Vector2(4, 0)
 shape = SubResource("RectangleShape2D_fu1uw")
 
-[node name="Sprite2D" type="Sprite2D" parent="Character"]
+[node name="Sprite2D" type="Sprite2D" parent="."]
+position = Vector2(4, 0)
 texture = ExtResource("1_o2t6l")
-
-[node name="Line2D" type="Line2D" parent="Character"]
-points = PackedVector2Array(0, 0, 0, 0)
-width = 3.0
 
 [node name="Hook" type="Area2D" parent="."]
 collision_layer = 2
 collision_mask = 2
 script = ExtResource("3_y36ev")
+
+[node name="Line2D" type="Line2D" parent="Hook"]
+position = Vector2(4, 0)
+points = PackedVector2Array(0, 0, 0, 0)
+width = 3.0
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Hook"]
 position = Vector2(1, 0.5)
@@ -48,5 +47,4 @@ shape = SubResource("RectangleShape2D_mmk66")
 scale = Vector2(0.5, 0.5)
 texture = SubResource("GradientTexture2D_era16")
 
-[connection signal="body_entered" from="Hook" to="Character" method="_on_hook_body_entered"]
-[connection signal="body_exited" from="Hook" to="Character" method="_on_hook_body_exited"]
+[connection signal="body_entered" from="Hook" to="." method="_on_hook_body_entered"]

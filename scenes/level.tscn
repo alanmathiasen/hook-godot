@@ -12,10 +12,11 @@
 position = Vector2(1110, 627)
 
 [node name="Character" parent="." instance=ExtResource("2_h8vo1")]
-position = Vector2(367, 271)
+position = Vector2(377, 271)
 
 [node name="Camera2D" type="Camera2D" parent="Character"]
 position = Vector2(1, 0)
+zoom = Vector2(0.8, 0.8)
 limit_smoothed = true
 
 [node name="Roof" parent="." instance=ExtResource("3_dnmmg")]
