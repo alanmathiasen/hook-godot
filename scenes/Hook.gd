@@ -15,6 +15,7 @@ var hook_length := 0.0
 var last_swing_velocity := Vector2.ZERO
 
 func _ready():
+  connect('body_entered', self, _on_hook_body_entered)
   line.points[0] = Vector2.ZERO
   self.hide()
 
@@ -46,3 +47,6 @@ func reset_hook():
   line.hide()
   hook_state = HookStates.NONE
   global_position = character.global_position
+
+func _on_hook_body_entered:
+  pass
