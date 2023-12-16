@@ -2,9 +2,7 @@ extends Area2D
 
 enum HookStates {NONE, EXTEND, HOOKED, JUST_RELEASED}
 
-signal hook_state_changed(hook_state)
-
-const HOOK_SPEED = 100.0
+const HOOK_SPEED = 300.0
 const HOOK_DIRECTION_RIGHT = Vector2(1, -1)
 const HOOK_DIRECTION_LEFT = Vector2(-1, -1)
 
@@ -22,12 +20,10 @@ func _ready():
 
 func _input(event):
   if event.is_action_pressed('hook'):
-    hook_state_changed.emit(HookStates.EXTEND)
-    pass
-    if state == HookStates.EXTEND:
-        reset_hook()
-    else:
+    if state != HookStates.EXTEND:
         state = HookStates.EXTEND
+    else:
+        reset_hook()
 
 func _physics_process(delta):
   match state:
@@ -35,7 +31,6 @@ func _physics_process(delta):
       extend_hook(delta)
 
 func extend_hook(delta):
-  # show hook
   self.show()
   line.show()
 
@@ -51,3 +46,8 @@ func reset_hook():
   state = HookStates.NONE
   global_position = character.global_position
 
+
+
+func _on_hook_body_entered(body:Node2D):
+  if body.get_collision_layer() == 1:
+    print('hook_length')

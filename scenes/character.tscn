@@ -48,4 +48,4 @@ scale = Vector2(0.5, 0.5)
 texture = SubResource("GradientTexture2D_era16")
 
 [connection signal="body_entered" from="Hook" to="." method="_on_hook_body_entered"]
-[connection signal="hook_state_changed" from="Hook" to="." method="_on_hook_hook_state_changed"]
+[connection signal="body_entered" from="Hook" to="Hook" method="_on_hook_body_entered"]

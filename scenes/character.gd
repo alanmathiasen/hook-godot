@@ -10,7 +10,7 @@ var local_hook_state = HookStates.NONE
 
 func _physics_process(delta):
 	if $Hook.state == HookStates.EXTEND:
-		print('hola')
+		pass
 	handle_movement(delta)
 	move_and_slide()
 
@@ -27,16 +27,10 @@ func handle_movement(delta):
 
 func _on_hook_body_entered(body):
 	if body.get_collision_layer() == 2:
-		print('gancho')
+		print('alala')
 		# hook_state = HookStates.HOOKED
 		# hook_position = hook.global_position
 		# hook_length = global_position.distance_to(hook_position)
 
-
-
-func _on_hook_hook_state_changed(hook_state:Variant):
-	local_hook_state = hook_state
-	print(hook_state)
-	pass # Replace with function body.
 	
 
