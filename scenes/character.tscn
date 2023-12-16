@@ -49,3 +49,4 @@ texture = SubResource("GradientTexture2D_era16")
 
 [connection signal="body_entered" from="Hook" to="." method="_on_hook_body_entered"]
 [connection signal="body_entered" from="Hook" to="Hook" method="_on_hook_body_entered"]
+[connection signal="hook_just_released" from="Hook" to="." method="_on_hook_hook_just_released"]

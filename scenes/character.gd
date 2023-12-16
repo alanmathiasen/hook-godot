@@ -2,15 +2,20 @@ extends CharacterBody2D
 
 enum HookStates {NONE, EXTEND, HOOKED, JUST_RELEASED}
 
+@onready var hook = $Hook
+
 var speed := 400
 var gravity := 500
 var jump_force = 600
 # var last_looking_right = true
-var local_hook_state = HookStates.NONE
 
 func _physics_process(delta):
-	if $Hook.state == HookStates.EXTEND:
+	if hook.state == HookStates.EXTEND:
 		pass
+	if hook.state == HookStates.HOOKED:
+		fix_hook()
+	if hook.state == HookStates.NONE:
+		reset_hook()
 	handle_movement(delta)
 	move_and_slide()
 
@@ -32,5 +37,16 @@ func _on_hook_body_entered(body):
 		# hook_position = hook.global_position
 		# hook_length = global_position.distance_to(hook_position)
 
-	
+func _on_hook_just_released():
+	reset_hook()
 
+func fix_hook():
+	var hook_global_position = hook.global_transform.origin
+	self.remove_child(hook)
+	get_tree().root.add_child(hook)
+	hook.global_transform.origin = hook_global_position
+
+func reset_hook():
+	get_tree().root.remove_child(hook)
+	self.add_child(hook) 
+	hook.global_position = global_position
