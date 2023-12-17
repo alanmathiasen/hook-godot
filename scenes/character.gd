@@ -7,46 +7,67 @@ enum HookStates {NONE, EXTEND, HOOKED, JUST_RELEASED}
 var speed := 400
 var gravity := 500
 var jump_force = 600
-# var last_looking_right = true
+var facing_direction := 1
+var swing_velocity := 0.0
+
+var angle_to_hook
+var distance_to_hook
+
+var angular_velocity := 0.0
+var angular_acceleration := 0.0
+var linear_velocity := 0.0
 
 func _physics_process(delta):
-	if hook.state == HookStates.EXTEND:
-		pass
-	if hook.state == HookStates.HOOKED:
-		fix_hook()
-	if hook.state == HookStates.NONE:
-		reset_hook()
+	print(velocity)
+	handle_hook(delta)
 	handle_movement(delta)
 	move_and_slide()
+	
 
+ 
 func handle_movement(delta):
 	var direction = Input.get_axis("ui_left", "ui_right")
 	if not is_on_floor():
 		velocity.y += gravity * delta
-	if direction != 0:
+	if direction != 0 and hook.state != HookStates.HOOKED:
 		velocity.x = speed * direction
+		facing_direction = 1 if direction > 0 else -1
 	else:
-		velocity.x = move_toward(velocity.x, 0, speed)
+		velocity.x = move_toward(velocity.x, 0, 10)
 	if is_on_floor() and Input.is_action_just_pressed("ui_up"):
 		velocity.y = -jump_force
 
-func _on_hook_body_entered(body):
-	if body.get_collision_layer() == 2:
-		print('alala')
-		# hook_state = HookStates.HOOKED
-		# hook_position = hook.global_position
-		# hook_length = global_position.distance_to(hook_position)
+
+func handle_hook(delta):
+	if(hook.state == HookStates.HOOKED):
+		add_angular_velocity(facing_direction * 0.1)
+		linear_velocity = angular_velocity * distance_to_hook
+		print('linear', linear_velocity)
+		process_velocity(delta)
+
+func _on_hook_body_entered(_body):
+	distance_to_hook = self.global_position.distance_to(hook.global_position)
+
+	if facing_direction == 1:
+		angle_to_hook = atan2(hook.global_position.y - self.global_position.y, hook.global_position.x - self.global_position.x)
+	else:
+		angle_to_hook = atan2(self.global_position.y - hook.global_position.y, self.global_position.x - hook.global_position.x)
+
+
+func process_velocity(delta:float)->void:
+	angular_acceleration = ((-gravity*delta) / distance_to_hook) * sin(angle_to_hook)
+	angular_velocity += angular_acceleration
+	angular_velocity *= 0.95
+	# print(angular_velocity)
+	angle_to_hook += angular_velocity * delta
+	
+	self.global_position = hook.global_position + Vector2(distance_to_hook * sin(angle_to_hook), distance_to_hook * cos(angle_to_hook))
+
+func add_angular_velocity(force:float)->void:
+	angular_velocity += force
 
 func _on_hook_just_released():
-	reset_hook()
-
-func fix_hook():
-	var hook_global_position = hook.global_transform.origin
-	self.remove_child(hook)
-	get_tree().root.add_child(hook)
-	hook.global_transform.origin = hook_global_position
-
-func reset_hook():
-	get_tree().root.remove_child(hook)
-	self.add_child(hook) 
-	hook.global_position = global_position
+	print('linear', linear_velocity)
+	velocity.x += linear_velocity * cos(angle_to_hook)
+	velocity.y -= linear_velocity * sin(angle_to_hook)
+	print('velocity', velocity)

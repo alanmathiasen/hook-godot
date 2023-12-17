@@ -18,7 +18,7 @@ colors = PackedColorArray(0.364711, 0.364711, 0.364711, 1, 0.357944, 0.357944, 0
 gradient = SubResource("Gradient_8l0ut")
 
 [node name="Character" type="CharacterBody2D"]
-position = Vector2(0, -1)
+position = Vector2(1, -1)
 script = ExtResource("1_kloc2")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
@@ -30,6 +30,7 @@ position = Vector2(4, 0)
 texture = ExtResource("1_o2t6l")
 
 [node name="Hook" type="Area2D" parent="."]
+position = Vector2(2, 1)
 collision_layer = 2
 collision_mask = 2
 script = ExtResource("3_y36ev")
@@ -49,4 +50,4 @@ texture = SubResource("GradientTexture2D_era16")
 
 [connection signal="body_entered" from="Hook" to="." method="_on_hook_body_entered"]
 [connection signal="body_entered" from="Hook" to="Hook" method="_on_hook_body_entered"]
-[connection signal="hook_just_released" from="Hook" to="." method="_on_hook_hook_just_released"]
+[connection signal="hook_just_released" from="Hook" to="." method="_on_hook_just_released"]
