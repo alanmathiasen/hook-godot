@@ -5,8 +5,8 @@ enum HookStates {NONE, EXTEND, HOOKED, JUST_RELEASED}
 @onready var hook = $Hook
 
 var speed := 400
-var gravity := 500
-var jump_force = 600
+var gravity := 200
+var jump_force = 400
 var facing_direction := 1
 var swing_velocity := 0.0
 
@@ -17,11 +17,14 @@ var angular_velocity := 0.0
 var angular_acceleration := 0.0
 var linear_velocity := 0.0
 
+var velocity_arrow = Vector2.ZERO
+
 func _physics_process(delta):
 	print(velocity)
 	handle_hook(delta)
 	handle_movement(delta)
 	move_and_slide()
+	queue_redraw()
 	
 
  
@@ -52,7 +55,7 @@ func _on_hook_body_entered(_body):
 		angle_to_hook = atan2(hook.global_position.y - self.global_position.y, hook.global_position.x - self.global_position.x)
 	else:
 		angle_to_hook = atan2(self.global_position.y - hook.global_position.y, self.global_position.x - hook.global_position.x)
-
+	
 
 func process_velocity(delta:float)->void:
 	angular_acceleration = ((-gravity*delta) / distance_to_hook) * sin(angle_to_hook)
@@ -71,3 +74,6 @@ func _on_hook_just_released():
 	velocity.x += linear_velocity * cos(angle_to_hook)
 	velocity.y -= linear_velocity * sin(angle_to_hook)
 	print('velocity', velocity)
+
+func _draw():
+	draw_line(Vector2.ZERO, velocity, Color.GREEN, 2.0)
