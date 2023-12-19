@@ -20,4 +20,4 @@ zoom = Vector2(0.8, 0.8)
 limit_smoothed = true
 
 [node name="Roof" parent="." instance=ExtResource("3_dnmmg")]
-position = Vector2(566, 27)
+position = Vector2(558, 26)
