@@ -5,7 +5,7 @@ enum HookStates {NONE, EXTEND, HOOKED, JUST_RELEASED}
 @onready var hook = $Hook
 
 var speed := 400
-var gravity := 200
+var gravity := 400
 var jump_force = 400
 var facing_direction := 1
 var swing_velocity := 0.0
@@ -43,7 +43,7 @@ func handle_movement(delta):
 
 func handle_hook(delta):
 	if(hook.state == HookStates.HOOKED):
-		add_angular_velocity(facing_direction * 0.1)
+		#add_angular_velocity(facing_direction * 0.1)
 		linear_velocity = angular_velocity * distance_to_hook
 		process_velocity(delta)
 
@@ -51,26 +51,38 @@ func _on_hook_body_entered(_body):
 	distance_to_hook = self.global_position.distance_to(hook.global_position)
 	if facing_direction == 1:
 		angle_to_hook = atan2(self.global_position.y - hook.global_position.y, self.global_position.x - hook.global_position.x)
+		print(rad_to_deg(angle_to_hook))
 	else:		
-		angle_to_hook = atan2(self.global_position.y - hook.global_position.y, self.global_position.x - hook.global_position.x)
+		angle_to_hook = atan2(hook.global_position.y - self.global_position.y, hook.global_position.x - self.global_position.x)
+		print(rad_to_deg(angle_to_hook))
 		
 
 func process_velocity(delta:float)->void:
-	angular_acceleration = ((-gravity*delta) / distance_to_hook) * sin(angle_to_hook)
-	angular_velocity += angular_acceleration
-	print(angular_velocity)
+	angular_acceleration = 1 * delta#((-gravity*delta) / distance_to_hook) * sin(angle_to_hook)
+	if facing_direction == 1:
+		angular_velocity += angular_acceleration
+	else:
+		angular_velocity -= angular_acceleration
+
+	# print(angular_velocity)
 	# angular_velocity *= 0.95
-	print('angular_velocity ',angular_velocity)
-	angle_to_hook += angular_velocity 
-	print('hook.global_position ', hook.global_position)
-	print('el resto ', Vector2(distance_to_hook * cos(angle_to_hook), distance_to_hook * sin(angle_to_hook)))
-	self.global_position = hook.global_position + Vector2(distance_to_hook * cos(angle_to_hook), distance_to_hook * sin(angle_to_hook))
+	# print('angular_velocity ',angular_velocity)
+	# print('angle_to_hook ',rad_to_deg(angle_to_hook))
+	angle_to_hook += angular_velocity * 0.01
+	# print('hook.global_position ', hook.global_position)
+	# print('el resto ', Vector2(distance_to_hook * cos(angle_to_hook), distance_to_hook * sin(angle_to_hook)))
+	self.global_position = hook.global_position - Vector2(distance_to_hook * sin(angle_to_hook), distance_to_hook * cos(angle_to_hook))
+	
 
 func add_angular_velocity(force:float)->void:
 	angular_velocity += force
 
 func _on_hook_just_released():
-	# velocity.x += linear_velocity * cos(angle_to_hook)
+	var release_speed = linear_velocity
+	velocity.x = -release_speed * cos(angle_to_hook)
+	velocity.y = 0
+	velocity.y = release_speed * sin(angle_to_hook)
+	# velocity.x -= linear_velocity * cos(angle_to_hook)
 	# velocity.y += linear_velocity * sin(angle_to_hook)
 
 
