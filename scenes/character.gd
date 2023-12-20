@@ -50,33 +50,19 @@ func handle_hook(delta):
 
 func _on_hook_body_entered(_body):
 	distance_to_hook = self.global_position.distance_to(hook.global_position)
-	print('character y ', self.global_position.y, ' hook y: ', hook.global_position.y)
-	print('character x ', self.global_position.x, ' hook x: ', hook.global_position.x)
-	print('y de hook a character', (self.global_position.y - hook.global_position.y))
-
-	print('x de hook a character', (self.global_position.x - hook.global_position.x))
 	if facing_direction == 1:
-		angle_to_hook = hook.get_angle_to(self.global_position)#atan2(-(self.global_position.y - hook.global_position.y), self.global_position.x - hook.global_position.x)
-		print('direction to hook y: ', (self.global_position.y - hook.global_position.y))
-		print('direction to hook x: ', (self.global_position.x - hook.global_position.x))
-		print(rad_to_deg(angle_to_hook))
+		angle_to_hook = hook.get_angle_to(self.global_position)
 	else:		
-		angle_to_hook = self.get_angle_to(hook.global_position) #atan2((self.global_position.y - hook.global_position.y), self.global_position.x - hook.global_position.x)
-		print('direction to hook y: ', (self.global_position.y - hook.global_position.y))
-		print('direction to hook x: ', (self.global_position.x - hook.global_position.x))
-		print(rad_to_deg(angle_to_hook))
+		angle_to_hook = self.get_angle_to(hook.global_position)
 		
 
 func process_velocity(delta:float)->void:
-	angular_acceleration = 0.1 * delta#((-gravity*delta) / distance_to_hook) * sin(angle_to_hook)
+	angular_acceleration = 2 * delta#((-gravity*delta) / distance_to_hook) * sin(angle_to_hook)
 	if facing_direction == 1:
 		angular_velocity += angular_acceleration
 	else:
 		angular_velocity -= angular_acceleration
 
-	# angular_velocity *= 0.95
-	# print('angular_velocity ',angular_velocity)
-	# print('angle_to_hook ',rad_to_deg(angle_to_hook))
 	angle_to_hook += angular_velocity * 0.01
 	# print(rad_to_deg(angle_to_hook))
 	# print('hook.global_position ', hook.global_position)

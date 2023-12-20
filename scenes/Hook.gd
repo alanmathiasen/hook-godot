@@ -44,6 +44,8 @@ func _input(event):
 			# si no llamar la funcion que resetea el hook
 			is_hooked = false
 			reset_hook()
+		else: 
+			reset_hook()
 
 
 func _physics_process(delta):
@@ -87,11 +89,14 @@ func reset_hook():
 	character.get_tree().root.remove_child(self)
 	character.add_child(self) 
 	global_position = character.global_position
-	hook_just_released.emit()
+	change_state(HookStates.NONE)
 	self.hide()
 	line.hide()
-	change_state(HookStates.NONE)
 	global_transform.origin = character.global_position
+	print('hook reset', state)
+	if state == HookStates.HOOKED:
+		hook_just_released.emit()
+
 
 func draw_line_to_character():
 	line.points[1] = to_local(character.global_position)
