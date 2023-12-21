@@ -1,13 +1,13 @@
 extends Area2D
 
 
-enum HookStates {NONE, EXTEND, HOOKED, JUST_RELEASED}
+enum HookStates {NONE, EXTEND, HOOKED}
 
 
 signal hook_just_released
 
 
-const HOOK_SPEED = 1000.0
+const HOOK_SPEED = 2000.0
 const HOOK_DIRECTION_RIGHT = Vector2(1, -1)
 const HOOK_DIRECTION_LEFT = Vector2(-1, -1)
 const HOOK_COLLISION_LAYER = 2
@@ -49,17 +49,16 @@ func _input(event):
 
 
 func _physics_process(delta):
-	line.points[1] = to_local(character.global_position)
+	draw_line_to_character()
+	
 	match state:
 		HookStates.EXTEND:
 			extend_hook(delta)
 		HookStates.HOOKED:
 			if previous_state != HookStates.HOOKED:
-				print('fix hook')
 				fix_hook()
 		HookStates.NONE:
-			if previous_state != HookStates.NONE and previous_state != HookStates.HOOKED:
-				print('reset hook')
+			if previous_state == HookStates.EXTEND:
 				reset_hook()
 
 
@@ -71,14 +70,14 @@ func extend_hook(delta):
   
 
 func _on_hook_body_entered(body:Node2D):
-	if body.get_collision_layer() == HOOK_COLLISION_LAYER and not state == HookStates.HOOKED:
-		change_state(HookStates.HOOKED)
-		# var direction_to_hook = (global_position - character.global_position).normalized()
-		# print(direction_to_hook)
-		# character.swing_velocity = character.velocity.dot(direction_to_hook) * direction_to_hook
+	if body.get_collision_layer() == HOOK_COLLISION_LAYER:
+		if state == HookStates.EXTEND:
+			change_state(HookStates.HOOKED)
 		
 func fix_hook():    
-	var hook_global_position = global_transform.origin
+	print('global_transform origin: ', global_transform.origin)
+	print('global_position: ', global_position)
+	var hook_global_position = global_position
 	character.remove_child(self)
 	character.get_tree().root.add_child(self)
 	self.global_position = hook_global_position
@@ -92,10 +91,10 @@ func reset_hook():
 	change_state(HookStates.NONE)
 	self.hide()
 	line.hide()
-	global_transform.origin = character.global_position
+	#global_transform.origin = character.global_position
 	print('hook reset', state)
-	if state == HookStates.HOOKED:
-		hook_just_released.emit()
+	
+	hook_just_released.emit()
 
 
 func draw_line_to_character():
