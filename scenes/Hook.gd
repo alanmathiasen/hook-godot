@@ -7,7 +7,7 @@ enum HookStates {NONE, EXTEND, HOOKED}
 signal hook_just_released
 
 
-const HOOK_SPEED = 2000.0
+const HOOK_SPEED = 3000.0
 const HOOK_DIRECTION_RIGHT = Vector2(1, -1)
 const HOOK_DIRECTION_LEFT = Vector2(-1, -1)
 const HOOK_COLLISION_LAYER = 2
