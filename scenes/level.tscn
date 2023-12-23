@@ -1,48 +1,108 @@
-[gd_scene load_steps=4 format=3 uid="uid://b7db3e4l5rfxe"]
+[gd_scene load_steps=3 format=3 uid="uid://b7db3e4l5rfxe"]
 
-[ext_resource type="PackedScene" uid="uid://cnnb1e0aeja7" path="res://scenes/floor.tscn" id="1_j16pw"]
 [ext_resource type="PackedScene" uid="uid://81a3ahycfxlq" path="res://scenes/character.tscn" id="2_h8vo1"]
 [ext_resource type="PackedScene" uid="uid://s2smcolei5go" path="res://scenes/roof.tscn" id="3_dnmmg"]
 
 [node name="Level" type="Node2D"]
-
-[node name="Floor" parent="." instance=ExtResource("1_j16pw")]
-
-[node name="Floor2" parent="." instance=ExtResource("1_j16pw")]
-position = Vector2(992, 848)
-rotation = 0.785397
-
-[node name="Floor3" parent="." instance=ExtResource("1_j16pw")]
-position = Vector2(2728, 1232)
-rotation = 0.523598
-
-[node name="Floor4" parent="." instance=ExtResource("1_j16pw")]
-position = Vector2(1504, 1072)
-
-[node name="Floor5" parent="." instance=ExtResource("1_j16pw")]
-position = Vector2(2144, 1072)
-
-[node name="Floor6" parent="." instance=ExtResource("1_j16pw")]
-position = Vector2(-160, 627)
 
 [node name="Character" parent="." instance=ExtResource("2_h8vo1")]
 position = Vector2(377, 271)
 
 [node name="Camera2D" type="Camera2D" parent="Character"]
 position = Vector2(38, -1)
-offset = Vector2(0, -140)
-zoom = Vector2(0.5, 0.5)
+offset = Vector2(0, -344)
+zoom = Vector2(0.3, 0.3)
 limit_smoothed = true
 
-[node name="Roof" parent="." instance=ExtResource("3_dnmmg")]
+[node name="RoofRoot" type="Node2D" parent="."]
+
+[node name="Roof" parent="RoofRoot" instance=ExtResource("3_dnmmg")]
+position = Vector2(-1816, 26)
+
+[node name="Roof5" parent="RoofRoot" instance=ExtResource("3_dnmmg")]
+position = Vector2(566, 26)
+
+[node name="Roof6" parent="RoofRoot" instance=ExtResource("3_dnmmg")]
 position = Vector2(566, 27)
 
-[node name="Roof2" parent="." instance=ExtResource("3_dnmmg")]
+[node name="Roof7" parent="RoofRoot" instance=ExtResource("3_dnmmg")]
+position = Vector2(566, 27)
+
+[node name="Roof8" parent="RoofRoot" instance=ExtResource("3_dnmmg")]
+position = Vector2(566, 27)
+
+[node name="Roof9" parent="RoofRoot" instance=ExtResource("3_dnmmg")]
+position = Vector2(-624, 27)
+
+[node name="Roof10" parent="RoofRoot" instance=ExtResource("3_dnmmg")]
+position = Vector2(-624, 27)
+
+[node name="Roof11" parent="RoofRoot" instance=ExtResource("3_dnmmg")]
+position = Vector2(-1816, 26)
+
+[node name="Roof12" parent="RoofRoot" instance=ExtResource("3_dnmmg")]
+position = Vector2(-624, 27)
+
+[node name="Roof13" parent="RoofRoot" instance=ExtResource("3_dnmmg")]
+position = Vector2(-624, 27)
+
+[node name="Roof14" parent="RoofRoot" instance=ExtResource("3_dnmmg")]
+position = Vector2(-4200, 24)
+
+[node name="Roof15" parent="RoofRoot" instance=ExtResource("3_dnmmg")]
+position = Vector2(-3008, 25)
+
+[node name="Roof16" parent="RoofRoot" instance=ExtResource("3_dnmmg")]
+position = Vector2(-3008, 25)
+
+[node name="Roof17" parent="RoofRoot" instance=ExtResource("3_dnmmg")]
+position = Vector2(-4200, 24)
+
+[node name="Roof18" parent="RoofRoot" instance=ExtResource("3_dnmmg")]
+position = Vector2(-3008, 25)
+
+[node name="Roof19" parent="RoofRoot" instance=ExtResource("3_dnmmg")]
+position = Vector2(-3008, 25)
+
+[node name="Roof20" parent="RoofRoot" instance=ExtResource("3_dnmmg")]
+position = Vector2(1024, 2064)
+scale = Vector2(0.4, 1)
+
+[node name="Roof21" parent="RoofRoot" instance=ExtResource("3_dnmmg")]
+position = Vector2(-632, 1136)
+
+[node name="Roof22" parent="RoofRoot" instance=ExtResource("3_dnmmg")]
+position = Vector2(-3024, 1562)
+
+[node name="Roof23" parent="RoofRoot" instance=ExtResource("3_dnmmg")]
+position = Vector2(-1832, 1563)
+
+[node name="Roof24" parent="RoofRoot" instance=ExtResource("3_dnmmg")]
+position = Vector2(-1832, 1563)
+
+[node name="Roof25" parent="RoofRoot" instance=ExtResource("3_dnmmg")]
+position = Vector2(-3024, 1562)
+
+[node name="Roof26" parent="RoofRoot" instance=ExtResource("3_dnmmg")]
+position = Vector2(-1832, 1563)
+
+[node name="Roof27" parent="RoofRoot" instance=ExtResource("3_dnmmg")]
+position = Vector2(-1832, 1563)
+
+[node name="Roof2" parent="RoofRoot" instance=ExtResource("3_dnmmg")]
 position = Vector2(1752, 27)
 
-[node name="Roof3" parent="." instance=ExtResource("3_dnmmg")]
+[node name="Roof3" parent="RoofRoot" instance=ExtResource("3_dnmmg")]
 position = Vector2(4008, 616)
 
-[node name="Roof4" parent="." instance=ExtResource("3_dnmmg")]
+[node name="Roof4" parent="RoofRoot" instance=ExtResource("3_dnmmg")]
 position = Vector2(2864, 320)
 rotation = 0.523598
+
+[node name="Floor" type="Node2D" parent="."]
+
+[node name="RigidBody2D" type="RigidBody2D" parent="Floor"]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Floor/RigidBody2D"]
+
+[node name="Sprite2D" type="Sprite2D" parent="Floor/RigidBody2D"]

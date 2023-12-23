@@ -1,15 +1,15 @@
 extends Area2D
 
 
-enum HookStates {NONE, EXTEND, HOOKED}
+enum HookStates {NONE, EXTEND, HOOKED, JUST_RELEASED}
 
 
 signal hook_just_released
 
 
-const HOOK_SPEED = 3000.0
-const HOOK_DIRECTION_RIGHT = Vector2(1, -1)
-const HOOK_DIRECTION_LEFT = Vector2(-1, -1)
+const HOOK_SPEED = 2000.0
+const HOOK_DIRECTION_RIGHT = Vector2(cos(deg_to_rad(-45)), sin(deg_to_rad(-45)))
+const HOOK_DIRECTION_LEFT = Vector2(cos(deg_to_rad(-135)), sin(deg_to_rad(-135)))
 const HOOK_COLLISION_LAYER = 2
 
 @onready var line := $Line2D
@@ -22,8 +22,6 @@ var release_direction := Vector2.ZERO
 var is_hooked := false
 var hook_position := Vector2.ZERO
 var hook_length := 0.0
-
-#var last_swing_velocity := Vector2.ZERO
 
 
 func _ready():
@@ -46,6 +44,8 @@ func _input(event):
 			reset_hook()
 		else: 
 			reset_hook()
+	if event.is_action_released(('hook')):
+		reset_hook()
 
 
 func _physics_process(delta):
@@ -60,13 +60,16 @@ func _physics_process(delta):
 		HookStates.NONE:
 			if previous_state == HookStates.EXTEND:
 				reset_hook()
-
+		HookStates.JUST_RELEASED:
+			
+				hook_just_released.emit()
+				change_state(HookStates.NONE)
 
 func extend_hook(delta):
 	self.show()
 	line.show()
 	# move hook
-	global_position += release_direction * HOOK_SPEED * delta
+	self.global_position += release_direction * HOOK_SPEED * delta
   
 
 func _on_hook_body_entered(body:Node2D):
@@ -75,8 +78,6 @@ func _on_hook_body_entered(body:Node2D):
 			change_state(HookStates.HOOKED)
 		
 func fix_hook():    
-	print('global_transform origin: ', global_transform.origin)
-	print('global_position: ', global_position)
 	var hook_global_position = global_position
 	character.remove_child(self)
 	character.get_tree().root.add_child(self)
@@ -88,13 +89,11 @@ func reset_hook():
 	character.get_tree().root.remove_child(self)
 	character.add_child(self) 
 	global_position = character.global_position
-	change_state(HookStates.NONE)
+	change_state(HookStates.JUST_RELEASED)
 	self.hide()
 	line.hide()
-	#global_transform.origin = character.global_position
-	print('hook reset', state)
 	
-	hook_just_released.emit()
+	
 
 
 func draw_line_to_character():

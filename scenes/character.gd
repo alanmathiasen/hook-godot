@@ -3,14 +3,14 @@ extends CharacterBody2D
 enum HookStates {NONE, EXTEND, HOOKED, JUST_RELEASED}
 
 const SPEED := 600
-const GRAVITY := 800
+const GRAVITY := 500
 const JUMP_FORCE = -600
 const BREAK_SPEED = 500
-const SWING_SPEED = 2
+const SWING_SPEED = 1.2
 
 var facing_direction := 1
 var angular_acceleration := 0.0
-var angular_velocity = 0.0
+var angular_velocity = Vector2.ZERO
 var initial_speed := 0.0
 var angle_to_hook
 var distance_to_hook
@@ -48,11 +48,15 @@ func handle_movement(delta):
 func handle_hook(delta):
 	if hook.state == HookStates.HOOKED:
 		process_velocity(delta)
+	for index in get_slide_collision_count():
+		var collision := get_slide_collision(index)
+		var body := collision.get_collider()
+		print("Collided with: ", body.)
 		
 
 func process_velocity(delta:float)->void:
 	angular_acceleration = ((GRAVITY * delta) / distance_to_hook) * -facing_direction 
-	angle_to_hook -= (angular_acceleration * delta + initial_speed) * delta * SWING_SPEED
+	angle_to_hook -= (angular_acceleration * delta + initial_speed) * delta * SWING_SPEED * delta
 	var new_pos = hook.global_position + Vector2(distance_to_hook * cos(angle_to_hook), distance_to_hook * sin(angle_to_hook))
 	var old_pos = self.global_position
 	self.global_position = new_pos
@@ -69,14 +73,17 @@ func _on_hook_body_entered(_body):
 
 
 func _on_hook_just_released():
-	velocity += angular_velocity 
-	var adjustment_factor = (1 / abs(velocity.y - 1) + 1) * 2
+	print(angular_velocity)
+	velocity += angular_velocity
+	angular_velocity = Vector2.ZERO 
+	var adjustment_factor = (1 / abs(velocity.y - 1) + 1) 
 	velocity.y /= adjustment_factor 
 	
 
 func _draw():
 	# draw_line(Vector2.ZERO, linear_velocity, Color.RED, 2.0)
 	draw_line(Vector2.ZERO, velocity, Color.GREEN, 2.0)
+	draw_line(Vector2.ZERO, angular_velocity, Color.BLUE, 2.0)
 	# draw_circle(hook.global_position, 10, Color.RED)
 	# var xPos = cos(self.get_angle_to(hook.global_position))
 	# var yPos = sin(self.get_angle_to(hook.global_position))
@@ -93,3 +100,8 @@ func vel_to_ang(vel: Vector2, radius: float) -> float:
 
 
 		return (angular_speed / radius) * facing_direction
+
+
+func _on_input_event(viewport:Node, event:InputEvent, shape_idx:int):
+	
+	pass # Replace with function body.
