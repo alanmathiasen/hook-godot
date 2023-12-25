@@ -1,11 +1,15 @@
-[gd_scene load_steps=8 format=3 uid="uid://81a3ahycfxlq"]
+[gd_scene load_steps=13 format=3 uid="uid://81a3ahycfxlq"]
 
 [ext_resource type="Script" path="res://scenes/character.gd" id="1_kloc2"]
-[ext_resource type="Texture2D" uid="uid://doex3l2vb7hqe" path="res://icon.svg" id="1_o2t6l"]
+[ext_resource type="Texture2D" uid="uid://bqy3wgljya6a0" path="res://assets/character/walk/playerGrey_walk1.png" id="3_toegg"]
 [ext_resource type="Script" path="res://scenes/Hook.gd" id="3_y36ev"]
+[ext_resource type="Texture2D" uid="uid://c43kjn4dwly8h" path="res://assets/character/walk/playerGrey_walk2.png" id="4_wfg5b"]
+[ext_resource type="Texture2D" uid="uid://s7fuaudc24op" path="res://assets/character/walk/playerGrey_walk3.png" id="5_jldxg"]
+[ext_resource type="Texture2D" uid="uid://jsu8jto6m14j" path="res://assets/character/walk/playerGrey_walk4.png" id="6_kfowf"]
+[ext_resource type="Texture2D" uid="uid://dsrqfy57l341g" path="res://assets/character/walk/playerGrey_walk5.png" id="7_7hj0e"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_fu1uw"]
-size = Vector2(126, 124)
+size = Vector2(48, 64)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_mmk66"]
 size = Vector2(28, 29)
@@ -17,18 +21,50 @@ colors = PackedColorArray(0.364711, 0.364711, 0.364711, 1, 0.357944, 0.357944, 0
 [sub_resource type="GradientTexture2D" id="GradientTexture2D_era16"]
 gradient = SubResource("Gradient_8l0ut")
 
+[sub_resource type="SpriteFrames" id="SpriteFrames_4quw5"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("3_toegg")
+}, {
+"duration": 1.0,
+"texture": ExtResource("4_wfg5b")
+}, {
+"duration": 1.0,
+"texture": ExtResource("5_jldxg")
+}, {
+"duration": 1.0,
+"texture": ExtResource("6_kfowf")
+}, {
+"duration": 1.0,
+"texture": ExtResource("7_7hj0e")
+}, {
+"duration": 1.0,
+"texture": ExtResource("6_kfowf")
+}, {
+"duration": 1.0,
+"texture": ExtResource("5_jldxg")
+}, {
+"duration": 0.9,
+"texture": ExtResource("4_wfg5b")
+}],
+"loop": true,
+"name": &"walk",
+"speed": 5.0
+}]
+
 [node name="Character" type="CharacterBody2D"]
 position = Vector2(1, -1)
 floor_stop_on_slope = false
+floor_max_angle = 0.294961
 script = ExtResource("1_kloc2")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
-position = Vector2(4, 0)
+position = Vector2(-1, -7)
 shape = SubResource("RectangleShape2D_fu1uw")
 
 [node name="Sprite2D" type="Sprite2D" parent="."]
 position = Vector2(4, 0)
-texture = ExtResource("1_o2t6l")
 
 [node name="Hook" type="Area2D" parent="."]
 position = Vector2(2, 1)
@@ -48,6 +84,11 @@ shape = SubResource("RectangleShape2D_mmk66")
 [node name="Sprite2D" type="Sprite2D" parent="Hook"]
 scale = Vector2(0.5, 0.5)
 texture = SubResource("GradientTexture2D_era16")
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
+sprite_frames = SubResource("SpriteFrames_4quw5")
+animation = &"walk"
+speed_scale = 2.0
 
 [connection signal="input_event" from="." to="." method="_on_input_event"]
 [connection signal="body_entered" from="Hook" to="." method="_on_hook_body_entered"]

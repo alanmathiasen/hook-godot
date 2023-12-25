@@ -18,7 +18,7 @@ var distance_to_hook
 var velocity_arrow = Vector2.ZERO
 
 @onready var hook = $Hook
-
+@onready var animation = $AnimatedSprite2D
 func _physics_process(delta):
 	handle_movement(delta)
 	handle_hook(delta)
@@ -32,12 +32,13 @@ func handle_movement(delta):
 	var direction = Input.get_axis("ui_left", "ui_right")
 
 	if direction != 0 and hook.state != HookStates.HOOKED:
-		var target_velocity = SPEED * direction
-		var interpolation_speed = 0.025  # Adjust this value to change the rate of interpolation
-		velocity.x = lerp(velocity.x, target_velocity, interpolation_speed)
+		if is_on_floor():
+			animation.play('walk')
+		velocity.x = calculate_velocity(direction)
 		facing_direction = 1 if direction > 0 else -1
 	elif is_on_floor():
-		velocity.x = move_toward(velocity.x, 0, delta * BREAK_SPEED)
+		velocity.x = move_toward(velocity.x, 0, delta * 10)
+		animation.stop()
 
 	if not is_on_floor():
 		velocity.y += GRAVITY * delta
@@ -51,12 +52,12 @@ func handle_hook(delta):
 	for index in get_slide_collision_count():
 		var collision := get_slide_collision(index)
 		var body := collision.get_collider()
-		print("Collided with: ", body.)
+		# print("Collided with: ", body.)
 		
 
 func process_velocity(delta:float)->void:
 	angular_acceleration = ((GRAVITY * delta) / distance_to_hook) * -facing_direction 
-	angle_to_hook -= (angular_acceleration * delta + initial_speed) * delta * SWING_SPEED * delta
+	angle_to_hook -= (angular_acceleration * delta + initial_speed) * delta * SWING_SPEED
 	var new_pos = hook.global_position + Vector2(distance_to_hook * cos(angle_to_hook), distance_to_hook * sin(angle_to_hook))
 	var old_pos = self.global_position
 	self.global_position = new_pos
@@ -105,3 +106,8 @@ func vel_to_ang(vel: Vector2, radius: float) -> float:
 func _on_input_event(viewport:Node, event:InputEvent, shape_idx:int):
 	
 	pass # Replace with function body.
+
+func calculate_velocity(direction):
+	var target_velocity = SPEED * direction
+	var interpolation_speed = 0.025  # Adjust this value to change the rate of interpolation
+	return lerp(velocity.x, target_velocity, interpolation_speed)
