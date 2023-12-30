@@ -19,6 +19,8 @@ var velocity_arrow = Vector2.ZERO
 
 @onready var hook = $Hook
 @onready var animation = $AnimatedSprite2D
+@onready var fsm = $Hook/HookStateMachine
+
 func _physics_process(delta):
 	handle_movement(delta)
 	handle_hook(delta)
@@ -31,7 +33,7 @@ func _physics_process(delta):
 func handle_movement(delta):
 	var direction = Input.get_axis("ui_left", "ui_right")
 
-	if direction != 0 and hook.state != HookStates.HOOKED:
+	if direction != 0:
 		if is_on_floor():
 			animation.play('walk')
 		velocity.x = calculate_velocity(direction)
@@ -47,12 +49,13 @@ func handle_movement(delta):
 		
 
 func handle_hook(delta):
-	if hook.state == HookStates.HOOKED:
+	var hook_state = fsm.get_current_state().name
+
+	if hook_state == 'HookedHookState':
 		process_velocity(delta)
 	for index in get_slide_collision_count():
 		var collision := get_slide_collision(index)
 		var body := collision.get_collider()
-		# print("Collided with: ", body.)
 		
 
 func process_velocity(delta:float)->void:
@@ -102,10 +105,6 @@ func vel_to_ang(vel: Vector2, radius: float) -> float:
 
 		return (angular_speed / radius) * facing_direction
 
-
-func _on_input_event(viewport:Node, event:InputEvent, shape_idx:int):
-	
-	pass # Replace with function body.
 
 func calculate_velocity(direction):
 	var target_velocity = SPEED * direction

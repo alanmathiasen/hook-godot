@@ -1,11 +1,15 @@
-[gd_scene load_steps=13 format=3 uid="uid://81a3ahycfxlq"]
+[gd_scene load_steps=17 format=3 uid="uid://81a3ahycfxlq"]
 
 [ext_resource type="Script" path="res://scenes/character.gd" id="1_kloc2"]
+[ext_resource type="Script" path="res://scripts/states/state_machine.gd" id="3_8p3eh"]
 [ext_resource type="Texture2D" uid="uid://bqy3wgljya6a0" path="res://assets/character/walk/playerGrey_walk1.png" id="3_toegg"]
 [ext_resource type="Script" path="res://scenes/Hook.gd" id="3_y36ev"]
+[ext_resource type="Script" path="res://scripts/states/Hook/IdleHookState.gd" id="4_436j1"]
 [ext_resource type="Texture2D" uid="uid://c43kjn4dwly8h" path="res://assets/character/walk/playerGrey_walk2.png" id="4_wfg5b"]
 [ext_resource type="Texture2D" uid="uid://s7fuaudc24op" path="res://assets/character/walk/playerGrey_walk3.png" id="5_jldxg"]
+[ext_resource type="Script" path="res://scripts/states/Hook/ExtendingHookState.gd" id="5_w2ggm"]
 [ext_resource type="Texture2D" uid="uid://jsu8jto6m14j" path="res://assets/character/walk/playerGrey_walk4.png" id="6_kfowf"]
+[ext_resource type="Script" path="res://scripts/states/Hook/HookedHookState.gd" id="6_pg6ou"]
 [ext_resource type="Texture2D" uid="uid://dsrqfy57l341g" path="res://assets/character/walk/playerGrey_walk5.png" id="7_7hj0e"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_fu1uw"]
@@ -85,6 +89,28 @@ shape = SubResource("RectangleShape2D_mmk66")
 scale = Vector2(0.5, 0.5)
 texture = SubResource("GradientTexture2D_era16")
 
+[node name="HookStateMachine" type="Node" parent="Hook" node_paths=PackedStringArray("current_state")]
+script = ExtResource("3_8p3eh")
+current_state = NodePath("IdleHookState")
+
+[node name="IdleHookState" type="Node" parent="Hook/HookStateMachine" node_paths=PackedStringArray("hook", "line", "character")]
+script = ExtResource("4_436j1")
+hook = NodePath("../..")
+line = NodePath("../../Line2D")
+character = NodePath("../../..")
+
+[node name="ExtendingHookState" type="Node" parent="Hook/HookStateMachine" node_paths=PackedStringArray("hook", "line", "character")]
+script = ExtResource("5_w2ggm")
+hook = NodePath("../..")
+line = NodePath("../../Line2D")
+character = NodePath("../../..")
+
+[node name="HookedHookState" type="Node" parent="Hook/HookStateMachine" node_paths=PackedStringArray("hook", "line", "character")]
+script = ExtResource("6_pg6ou")
+hook = NodePath("../..")
+line = NodePath("../../Line2D")
+character = NodePath("../../..")
+
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
 sprite_frames = SubResource("SpriteFrames_4quw5")
 animation = &"walk"
@@ -93,4 +119,3 @@ speed_scale = 2.0
 [connection signal="input_event" from="." to="." method="_on_input_event"]
 [connection signal="body_entered" from="Hook" to="." method="_on_hook_body_entered"]
 [connection signal="body_entered" from="Hook" to="Hook" method="_on_hook_body_entered"]
-[connection signal="hook_just_released" from="Hook" to="." method="_on_hook_just_released"]
