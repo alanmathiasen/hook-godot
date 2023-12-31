@@ -1,13 +1,9 @@
-class_name ExtendingHookState extends State
+class_name ExtendingHookState extends HookState
 
 const HOOK_DIRECTION_RIGHT = Vector2(cos(deg_to_rad(-45)), sin(deg_to_rad(-45)))
 const HOOK_DIRECTION_LEFT = Vector2(cos(deg_to_rad(-135)), sin(deg_to_rad(-135)))
 const HOOK_SPEED = 2000.0
 const HOOK_COLLISION_LAYER = 2
-
-@export var hook: Area2D
-@export var line: Line2D
-@export var character: CharacterBody2D
 
 var release_direction
 

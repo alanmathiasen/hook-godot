@@ -1,8 +1,4 @@
-class_name HookedHookState extends State
-
-@export var hook: Area2D
-@export var line: Line2D
-@export var character: CharacterBody2D
+class_name HookedHookState extends HookState
 
 var has_entered = false
 

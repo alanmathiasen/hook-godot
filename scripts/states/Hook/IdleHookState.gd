@@ -1,8 +1,4 @@
-class_name IdleHookState extends State
-
-@export var hook: Area2D
-@export var line: Line2D
-@export var character: CharacterBody2D
+class_name IdleHookState extends HookState
 
 func Enter():
 	hook.set_collision_layer_value(2, false)  # Disable the collision layer

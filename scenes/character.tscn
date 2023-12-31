@@ -1,4 +1,4 @@
-[gd_scene load_steps=17 format=3 uid="uid://81a3ahycfxlq"]
+[gd_scene load_steps=18 format=3 uid="uid://81a3ahycfxlq"]
 
 [ext_resource type="Script" path="res://scenes/character.gd" id="1_kloc2"]
 [ext_resource type="Script" path="res://scripts/states/state_machine.gd" id="3_8p3eh"]
@@ -10,6 +10,7 @@
 [ext_resource type="Script" path="res://scripts/states/Hook/ExtendingHookState.gd" id="5_w2ggm"]
 [ext_resource type="Texture2D" uid="uid://jsu8jto6m14j" path="res://assets/character/walk/playerGrey_walk4.png" id="6_kfowf"]
 [ext_resource type="Script" path="res://scripts/states/Hook/HookedHookState.gd" id="6_pg6ou"]
+[ext_resource type="Script" path="res://scripts/states/Hook/HookState.gd" id="7_5pl0h"]
 [ext_resource type="Texture2D" uid="uid://dsrqfy57l341g" path="res://assets/character/walk/playerGrey_walk5.png" id="7_7hj0e"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_fu1uw"]
@@ -93,23 +94,20 @@ texture = SubResource("GradientTexture2D_era16")
 script = ExtResource("3_8p3eh")
 current_state = NodePath("IdleHookState")
 
-[node name="IdleHookState" type="Node" parent="Hook/HookStateMachine" node_paths=PackedStringArray("hook", "line", "character")]
+[node name="IdleHookState" type="Node" parent="Hook/HookStateMachine"]
 script = ExtResource("4_436j1")
-hook = NodePath("../..")
-line = NodePath("../../Line2D")
-character = NodePath("../../..")
 
-[node name="ExtendingHookState" type="Node" parent="Hook/HookStateMachine" node_paths=PackedStringArray("hook", "line", "character")]
+[node name="ExtendingHookState" type="Node" parent="Hook/HookStateMachine"]
 script = ExtResource("5_w2ggm")
-hook = NodePath("../..")
-line = NodePath("../../Line2D")
-character = NodePath("../../..")
 
-[node name="HookedHookState" type="Node" parent="Hook/HookStateMachine" node_paths=PackedStringArray("hook", "line", "character")]
+[node name="HookedHookState" type="Node" parent="Hook/HookStateMachine"]
 script = ExtResource("6_pg6ou")
+
+[node name="HookState" type="Node" parent="Hook/HookStateMachine" node_paths=PackedStringArray("character", "hook", "line")]
+script = ExtResource("7_5pl0h")
+character = NodePath("../../..")
 hook = NodePath("../..")
 line = NodePath("../../Line2D")
-character = NodePath("../../..")
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
 sprite_frames = SubResource("SpriteFrames_4quw5")
